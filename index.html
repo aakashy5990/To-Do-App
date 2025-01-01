@@ -3,23 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>To-DO List </title>
+    <title>To-Do List</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="container">
         <div class="todo-app">
-            <h2>To-Do List <img src="images/icon.png" alt=""></h2>
+            <h2>Advance To-Do List <img src="images/icon.png" alt=""></h2>
             <div class="row">
-                <input type="text" name="" id="input-box" placeholder="Add Your Text">
-                <button onclick="addTask()">Add</button>
+                <input type="text" id="day-box" placeholder="Add Day">
+                <button onclick="addDay()">Add Day</button>
             </div>
-            <ul id="list-container">
-                <!-- <li class="checked">Task 1</li>
-                <li>Task 2</li>
-                <li>Task 3</li> -->
-            </ul>
+            <div id="list-container">
+                <!-- Days and tasks will be added dynamically here -->
+            </div>
+            <div id="stats" class="stats">
+                <!-- Stats will be dynamically updated here -->
+            </div>
         </div>
+        
     </div>
 
     <script src="js/javascript.js"></script>

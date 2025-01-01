@@ -10,12 +10,14 @@
     background: linear-gradient(135deg,#153677,#4c085f);
     padding: 10px;
 }
+
 .todo-app{
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 540px;
+    max-width: 800px;
     background: #fff;
     margin: 100px auto 20px;
-    padding: 40px 30px 70px;
+    padding: 40px 30px;
     border-radius: 10px;
 }
 .todo-app h2{
@@ -37,8 +39,10 @@
     padding-left: 20px;
     margin-bottom: 25px;
 }
-input{
+#day-box{
     flex: 1;
+}
+input{
     border: none;
     outline: none;
     background: transparent;
@@ -64,7 +68,7 @@ ul li{
     position: relative;
 }
 
-ul li:before{
+/* ul li:before{
     content: '';
     position: absolute;
     height: 28px;
@@ -76,7 +80,7 @@ ul li:before{
     top: 12px;
     left: 8px;
 
-}
+} */
 ul li.checked{
     color: #555;
     text-decoration: line-through;
@@ -84,13 +88,9 @@ ul li.checked{
 ul li.checked::before{
     background-image: url(../images/checked.png);
 }
+
 ul li span{
-    position: absolute;
-    right: 0;
-    top: 5px;
-    width: 40px;
-    height: 40px;
-    font-size: 22px;
+    font-size: .8rem;
     color: #555;
     line-height: 40px;
     text-align: center;
@@ -98,4 +98,69 @@ ul li span{
 }
 ul li span:hover{
     background: #edeef0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.day {
+    margin-bottom: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.day-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.day-header h3 {
+    margin: 0;
+}
+
+.day-header h3.completed {
+    text-decoration: line-through;
+    color: green;
+}
+
+.task-list {
+    list-style: none;
+}
+
+.task-list li {
+    margin: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-input {
+    background: #edeef0;
+    width: 100%;
+    padding: 15px 0 15px 20px;
+    margin-top: 10px;
+    border-radius: 30px;
+    flex: 1;
+    border: none;
+    outline: none;
+}
+
+.date-spam{
+    font-size: .8rem;
+    text-align: center;
+}
+
+.stats p{
+    margin: 5px 0;
 }
