@@ -61,9 +61,9 @@ function addTask(taskInput) {
         <div class="li_perents">
             <input type="checkbox" onclick="checkDayComplete(this)">
         </div>
-             ${taskText} 
-            <button onclick="removeTask(this)">Remove Task</button>
-            <span class="time">${currentTime}</span>
+        ${taskText}
+        <button onclick="removeTask(this)">Remove Task</button>
+        <span class="time">${currentTime}</span>
     `;
 
     taskList.appendChild(li);
@@ -103,19 +103,15 @@ function removeTask(button) {
 
 function removeDay(button) {
     button.closest(".day").remove();
-    updateStats(); // Ensure the stats are updated after removal
+    updateStats();
     saveData();
 }
 
 // Update stats for total days, tasks, marked/unmarked days, and task stats
 function updateStats() {
     const totalDays = listContainer.querySelectorAll(".day").length;
-    if(totalDays == 0){
-        stats.style.display = "none";
-    }
-    else{
-        stats.style.display = "block";
-    }
+    stats.style.display = totalDays === 0 ? "none" : "block";
+
     const allTasks = listContainer.querySelectorAll("li");
     const totalTasks = allTasks.length;
     const completedTasks = listContainer.querySelectorAll("li input[type='checkbox']:checked").length;
@@ -124,7 +120,6 @@ function updateStats() {
     const completedDays = listContainer.querySelectorAll(".day .day-header h3.completed").length;
     const uncompletedDays = totalDays - completedDays;
 
-    // Update the stats even when totalDays is 0
     stats.innerHTML = `
         <p>Total Days: ${totalDays}</p>
         <p>Marked Days: ${completedDays}</p>
@@ -137,23 +132,67 @@ function updateStats() {
 
 // Save data to Local Storage
 function saveData() {
-    localStorage.setItem("data", listContainer.innerHTML);
+    const days = [];
+    listContainer.querySelectorAll(".day").forEach(dayDiv => {
+        const dayData = {
+            dayName: dayDiv.querySelector(".day-header h3").textContent,
+            date: dayDiv.querySelector(".date-spam").textContent,
+            tasks: []
+        };
+        dayDiv.querySelectorAll("li").forEach(task => {
+            dayData.tasks.push({
+                text: task.childNodes[2].nodeValue.trim(),
+                time: task.querySelector(".time").textContent,
+                checked: task.querySelector("input[type='checkbox']").checked
+            });
+        });
+        days.push(dayData);
+    });
+    localStorage.setItem("data", JSON.stringify(days));
 }
 
 // Load data from Local Storage on page load
 function showTask() {
-    listContainer.innerHTML = localStorage.getItem("data") || "";
+    const savedData = JSON.parse(localStorage.getItem("data") || "[]");
+    savedData.forEach(dayData => {
+        const dayDiv = document.createElement("div");
+        dayDiv.classList.add("day");
 
-    const checkboxes = listContainer.querySelectorAll("input[type='checkbox']");
-    checkboxes.forEach(checkbox => checkbox.addEventListener("click", () => checkDayComplete(checkbox)));
+        dayDiv.innerHTML = `
+            <div class="day-header">
+                <h3>${dayData.dayName}</h3>
+                <div class="addday_btn">
+                    <button onclick="addTaskFromButton(this)">Add Task</button>
+                    <button onclick="removeDay(this)">Remove Day</button>
+                </div>
+            </div>
+            <span class="date-spam">${dayData.date}</span>
+            <ul class="task-list"></ul>
+            <input type="text" class="task-input" placeholder="Add task">
+        `;
 
-    const taskInputs = listContainer.querySelectorAll(".task-input");
-    taskInputs.forEach(taskInput => {
+        const taskList = dayDiv.querySelector(".task-list");
+        dayData.tasks.forEach(task => {
+            const li = document.createElement("li");
+            li.innerHTML = `
+                <div class="li_perents">
+                    <input type="checkbox" ${task.checked ? "checked" : ""} onclick="checkDayComplete(this)">
+                </div>
+                ${task.text}
+                <button onclick="removeTask(this)">Remove Task</button>
+                <span class="time">${task.time}</span>
+            `;
+            taskList.appendChild(li);
+        });
+
+        const taskInput = dayDiv.querySelector(".task-input");
         taskInput.addEventListener("keydown", function (event) {
             if (event.key === "Enter") {
                 addTask(taskInput);
             }
         });
+
+        listContainer.appendChild(dayDiv);
     });
 
     updateStats();
